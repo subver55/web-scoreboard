@@ -198,3 +198,11 @@ html, body{
   color:#e0e0e0;
   text-align: right;
 }
+
+@keyframes blink {
+  from { background-color: white; }
+  to { background-color: inherit; }
+}
+.blink {
+  animation: blink 3s ; /* IE 10+ */
+}

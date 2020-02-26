@@ -202,7 +202,16 @@ function reloadData(json)
   {
     if(raceName!=null)
     {
-        raceName.innerHTML = refresh["eventName"];
+        var p = refresh["eventName"];
+        if(p=="" || p==null)
+        {
+          raceName.innerHTML = p;
+        }
+        else
+        {
+          raceName.innerHTML = p+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp";
+        }
+
     }
     if(runName!=null)
     {
@@ -243,6 +252,15 @@ function reloadData(json)
   }
   if(!isEmpty(update))
   {
+    if(json["command"]=="clear")
+    {
+      while(resultsTableBody.rows.length>1)
+      {
+        resultsTable.deleteRow(1);
+      }
+      return;
+    }
+
     blTime = update["bestLapTime"];
     blName = update["bestLapName"];
     if(blName==null || blTime==0 || blTime==null)
@@ -260,18 +278,9 @@ function reloadData(json)
     results = update["results"];
     if(results!=null)
     {
-      console.log(results);
-      currentRowCount = resultsTableBody.rows.length-1;
-      if(results.length==0)
-      {
-        while(resultsTableBody.rows.length>1)
-        {
-          resultsTable.deleteRow(1);
-        }
-        return;
-      }
+      var currentRowCount = resultsTableBody.rows.length-1;
       var newRowCount = 0;
-      for(i=0;i<results.length)
+      for(i=0;i<results.length;i++)
       {
         var pos = results[i]["pos"][0];
         if(pos!=null)
@@ -302,16 +311,66 @@ function reloadData(json)
       }
       if(results.length>0)
       {
+        /*
+        var tableCells = resultsTableBody.getElementsByTagName("tr");
+        for(let el of tableCells)
+        {
+          el.classList.forEach((clname,i,arr)=>{
+            if(clname.substring(0,6)=="compid")
+            {
+                arr.remove(clname);
+            }
+          });
+        }*/
+
         for(i=0;i<results.length;i++)
         {
           resultItem = results[i];
           okeys = Object.keys(resultItem);
-          var pos = resultsItem["pos"][0];
+          var pos = resultItem["pos"][0];
+          var competitorId = resultItem["competitor_id"];
           if(pos==null)
           {
             continue;
           }
-          cells = resultsTableBody.rows[pos].getElementsByTagName("td");
+          row = resultsTableBody.getElementsByClassName("compid"+competitorId);
+          var prevPos = -1;
+
+          if(row.length>0)
+          {
+            row =row[0];
+            for(j=0;j<resultsTableBody.rows.length;j++)
+            {
+              if(resultsTableBody.rows[j]==row)
+              {
+                prevPos = j;
+                break;
+              }
+            }
+          }
+          if(prevPos!=-1)
+          {
+            if(prevPos!=pos)
+            {
+              resultsTableBody.deleteRow(prevPos);
+              var pr = resultsTableBody.insertRow(pos);
+              pr.innerHTML = row.innerHTML;
+              row = pr;
+              row.classList.add("compid"+competitorId);
+            }
+          }
+          else {
+            if(row.length==0)
+            {
+              row = resultsTableBody.rows[pos];
+            }
+            row.classList.add("compid"+competitorId);
+          }
+          cells = row.getElementsByTagName("td");
+          for(let cell of cells)
+          {
+            cell.classList.remove("blink");
+          }
           for(key in okeys)
           {
             el = cells[okeys[key]];
@@ -373,7 +432,6 @@ function reloadData(json)
                   }
                   el.innerHTML = val;
                 }
-
               }
               else
               {
@@ -390,5 +448,37 @@ function reloadData(json)
         }
       }
     }
+    var lastPassings = update["lastPassings"];
+    if(lastPassings!=null)
+    {
+      //console.log(lastPassings);
+      lastPassings.forEach(passing => {
+        var compId = passing["competitor_id"];
+        if(compId!=null)
+        {
+          var row = resultsTableBody.getElementsByClassName("compid"+compId)[0];
+          cells = row.getElementsByTagName("td");
+          var passingType = passing["pass_type"];
+          if(passingType!=null)
+          {
+            el = cells[passingType];
+            if(el!=null)
+            {
+              blink(el);
+            }
+          }
+        }
+      });
+    }
   }
+}
+
+function rmBlink(p)
+{
+  p.classList.remove("blink");
+}
+function blink(p)
+{
+  p.classList.add("blink");
+  setTimeout(rmBlink,3000,p);
 }
