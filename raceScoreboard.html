@@ -1,0 +1,98 @@
+
+<html>
+<header>
+<meta charset="UTF-8">
+
+<link rel="stylesheet" href="raceScoreboard.css?v=1"/>
+<script src="dataPullerWS.js" type="text/javascript"></script>
+</header>
+<body onload="bodyLoaded()">
+<div id="container">
+    <div id="header">
+      <span id="race_name">
+
+      </span>
+      <span id="run_name">
+
+      </span>
+      <span id="current_time">
+        00:00:00
+      </span>
+    </div>
+    <div id="content">
+          <div id="results">
+            <table id="resultsTable">
+              <tr id="headerRow">
+                <th id="pos"> Поз.</th>
+                <th id="num">№</th>
+                <th id="name">Имя</th>
+                <th id="best_lap" class="lapTime">Лучший<br> круг</th>
+                <th id="last_sect_1" class="sectorTime">S1</th>
+                <th id="last_sect_2" class="sectorTime">S2</th>
+                <th id="last_sect_3" class="sectorTime">S3</th>
+                <th id="last_lap" class="lapTime">Последний<br> круг</th>
+                <th id="last_lap_1" class="lapTime">Последний<br> круг-1</th>
+                <th id="last_lap_2" class="lapTime">Последний<br> круг-2</th>
+                <th id="laps">Круги</th>
+                <th id="diff" class="sectorTime">Разн.<br>лидер</th>
+                <th id="gap" class="sectorTime">Разн.<br>пред.</th>
+                <th id="best_sector_1" class="sectorTime">Лучш.<br>S1</th>
+                <th id="best_sector_2" class="sectorTime">Лучш.<br>S2</th>
+                <th id="best_sector_3" class="sectorTime">Лучш.<br>S3</th>
+                <th id="theor_lap_time" class="lapTime">Теор.<br>круг</th>
+              </tr>
+              <tr id="dataRow" class="oddRow">
+                <td id="pos" class=""></td>
+                <td id="num"></td>
+                <td id="name"></td>
+                <td id="best_lap_time" class="lapTime personalBest"></td>
+                <td id="last_sector_1" class="lapTime sectorTime"></td>
+                <td id="last_sector_2" class="lapTime sectorTime"></td>
+                <td id="last_sector_3" class="lapTime sectorTime"></td>
+                <td id="last_lap_time_1" class="lapTime"></td>
+                <td id="last_lap_time_2" class="lapTime"></td>
+                <td id="last_lap_time_3" class="lapTime"></td>
+                <td id="laps_count" class="laps"></td>
+                <td id="diff" class="diff lapTime sectorTime"></td>
+                <td id="gap" class="diff lapTime sectorTime"></td>
+                <td id="best_sector_1" class="lapTime sectorTime personalBest"></td>
+                <td id="best_sector_2" class="lapTime sectorTime personalBest"></td>
+                <td id="best_sector_3" class="lapTime sectorTime personalBest"></td>
+                <td id="combined_best_lap_time" class="lapTime"></td>
+              </tr>
+            </table>
+          </div>
+          <div id=advertisment>
+
+          </div>
+    </div>
+    <div id="footer">
+        <div id="left_flag" class="greenFlag footerFlags">
+        </div>
+        <div id="footer_text">
+          <span>
+            Время гонки
+          </span>
+          <span id="race_time">
+            00:00:00
+          </span>
+          <span>
+            Лучший круг
+          </span>
+          <span id="best_lap_time" class ="totalBest">
+
+          </span>
+          <span id="best_lap_name">
+
+          </span>
+        </div>
+        <div id="right_flag" class="greenFlag footerFlags">
+        </div>
+    </div>
+    <div id="pLink">
+      работает на "Kart Chrono Timing System" vk.com/chronos_wireless
+    </div>
+
+</div>
+</body>
+</html>

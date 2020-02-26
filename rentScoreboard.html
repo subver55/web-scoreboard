@@ -1,0 +1,193 @@
+
+<html>
+<header>
+<meta charset="UTF-8">
+
+<link rel="stylesheet" href="rentScoreboard.css?v=1"/>
+<script src="dataPullerWS.js" type="text/javascript"></script>
+<link rel="stylesheet" href="WeatherWidget/weatherwidget.css?v=1"/>
+<script src="WeatherWidget/weatherwidgetWs.js" type="text/javascript"></script>
+</header>
+<body onload="bodyLoaded()">
+<div id="container">
+    <div id="header">
+      <span id="race_name">
+
+      </span>
+      <span id="run_name">
+
+      </span>
+      <span id="current_time">
+        00:00:00
+      </span>
+    </div>
+    <div id="content">
+          <div id="results">
+            <table id="resultsTable">
+              <tr id="headerRow">
+                <th id="pos"> Поз.</th>
+                <th id="num">№</th>
+                <th id="name">Имя</th>
+                <th id="best_lap" class="lapTime">Лучший<br> круг</th>
+                <th id="last_sect_1" class="sectorTime">S1</th>
+                <th id="last_sect_2" class="sectorTime">S2</th>
+                <th id="last_sect_3" class="sectorTime">S3</th>
+                <th id="last_lap" class="lapTime">Последний<br> круг</th>
+                <th id="laps">Круги</th>
+                <th id="diff" class="sectorTime">Разн.<br>лидер</th>
+                <th id="gap" class="sectorTime">Разн.<br>пред.</th>
+                <th id="combined_best_lap_time" class="lapTime">Теор.<br>круг</th>
+              </tr>
+              <tr id="dataRow" class="oddRow">
+                <td id="pos" class=""></td>
+                <td id="num"></td>
+                <td id="name"></td>
+                <td id="best_lap_time" class="lapTime personalBest"></td>
+                <td id="last_sector_1" class="lapTime sectorTime"></td>
+                <td id="last_sector_2" class="lapTime sectorTime"></td>
+                <td id="last_sector_3" class="lapTime sectorTime"></td>
+                <td id="last_lap_time_1" class="lapTime"></td>
+                <td id="laps_count" class="laps"></td>
+                <td id="diff" class="diff lapTime sectorTime"></td>
+                <td id="gap" class="diff lapTime sectorTime"></td>
+                <td id="combined_best_lap_time" class="lapTime"></td>
+              </tr>
+            </table>
+          </div>
+          <div id=advertisment>
+            <div  id="weather">
+              <div id="weatherHdr" class="advertHeader">
+                Погода на трассе
+              </div>
+
+              <div id="weatherwidget">
+                <div id="innerDiv">
+                  <div  class="forecastItem">
+                    <div id="forecastTime" class="forecastEpoch">
+                      Сейчас
+                    </div>
+                    <div class="inRow">
+                      <div id="currentIcon" class="forecastIcon">
+
+                      </div>
+                      <div id="currentTemperature" class="temperatureValue">
+                      </div>
+                    </div>
+                    <div id="currentDescription" class="weatherDescription">
+                    </div>
+                  </div>
+                  <div class="forecastItem">
+                    <div id="forecastTime0" class="forecastEpoch">
+                    </div>
+                    <div class="inRow">
+                      <div id="forecastIcon0" class="forecastIcon">
+
+                      </div>
+                      <div id="forecastTemperature0" class="temperatureValue">
+                      </div>
+                    </div>
+                    <div id="forecastDescription0" class=weatherDescription>
+                    </div>
+                  </div>
+
+                  <div class="forecastItem">
+                    <div id="forecastTime1" class="forecastEpoch">
+                    </div>
+                    <div class="inRow">
+                      <div id="forecastIcon1" class="forecastIcon">
+
+                      </div>
+                      <div id="forecastTemperature1" class="temperatureValue">
+                      </div>
+                    </div>
+                    <div id="forecastDescription1" class=weatherDescription>
+                    </div>
+                  </div>
+
+                  <div class="forecastItem">
+                    <div id="forecastTime2" class="forecastEpoch">
+                    </div>
+                    <div class="inRow">
+                      <div id="forecastIcon2" class="forecastIcon">
+
+                      </div>
+                      <div id="forecastTemperature2" class="temperatureValue">
+                      </div>
+                    </div>
+                    <div id="forecastDescription2" class=weatherDescription>
+                    </div>
+                  </div>
+                </div>
+              </div>
+                <div id="darkSkyLink" onclick="loadWeatherForecast()" >
+                <a href="https://darksky.net/poweredby/">Powered by Dark Sky</a>
+                </div>
+            </div>
+
+<!--
+
+Здесь вводить объявления
+и рекламу
+
+-->
+
+            <div class="advert">
+              <div id="trackHdr" class="advertHeader">
+                Схема трассы
+              </div>
+              <img src="Images/track.png"/>
+            </div>
+
+            <div class="advert">
+              <div id="" class="advertHeader">
+                Школа картинга
+              </div>
+              <div class="advertContent">
+              How TO - Include HTML. The HTML. Save the HTML you want to include in an .html file: content.html. Include the HTML. Including HTML is done by using a w3-include-html attribute: Example. Add the JavaScript. HTML includes are
+              </div>
+            </div>
+            <div class="advert">
+              <div id="" class="advertHeader">
+                Любительские соревнования
+              </div>
+              <div class="advertContent">
+              How TO - Include HTML. The HTML. Save the HTML you want to include in an .html file: content.html. Include the HTML. Including HTML is done by using a w3-include-html attribute: Example. Add the JavaScript. HTML includes are
+              </div>
+            </div>
+
+          </div>
+<!--
+
+Конец блока объявлений и рекламы
+
+-->
+    </div>
+    <div id="footer">
+        <div id="left_flag" class="greenFlag footerFlags">
+        </div>
+        <div id="footer_text">
+          <span>
+            Время гонки
+          </span>
+          <span id="race_time">
+            00:00:00
+          </span>
+          <span>
+            Лучший круг
+          </span>
+          <span id="best_lap_time" class ="totalBest">
+
+          </span>
+          <span id="best_lap_name">
+
+          </span>
+        </div>
+        <div id="right_flag" class="greenFlag footerFlags">
+        </div>
+    </div>
+    <div id="pLink">
+      работает на "Kart Chrono Timing System" vk.com/chronos_wireless
+    </div>
+</div>
+</body>
+</html>

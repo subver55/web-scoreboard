@@ -1,0 +1,93 @@
+#weatherwidget{
+  padding-top: 20%;
+  position:relative;
+}
+#innerDiv{
+  display: flex;
+  font-family: tahoma;
+  flex-direction: row;
+  color: white;
+  position: absolute;
+  top:0;
+  bottom: 0;
+  left:0;
+  right: 0;
+}
+.forecastItem{
+  top:0;
+  width: 20%;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  padding-left: 2.5%;
+  padding-right: 2.5%;
+}
+.forecastEpoch{
+  text-align: center;
+}
+.inRow{
+  display: flex;
+  flex-direction: row;
+  flex-grow: 1;
+  align-items: center;
+}
+
+.forecastIcon{
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: top left;
+  flex-grow: 1;
+  height: 100%;
+}
+/*
+.forecastIcon img{
+  height: 100%;
+}*/
+.temperatureValue{
+}
+.weatherDescription{
+  text-align: center;
+  font-size:0.8em;
+  height: 2.5em;
+  white-space: normal;
+}
+.clear-day{
+  background-image: url(Icons-DarkSky/clear-day.png);
+}
+.clear-night{
+  background-image: url(Icons-DarkSky/clear-night.png);
+}
+.cloudy {
+  background-image:  url(Icons-DarkSky/cloudy.png);
+}
+.fog{
+  background-image: url(Icons-DarkSky/fog.png);
+}
+.partly-cloudy-day {
+  background-image: url(Icons-DarkSky/partly-cloudy-day.png);
+}
+.partly-cloudy-night {
+  background-image: url(Icons-DarkSky/partly-cloudy-night.png);
+}
+.rain {
+  background-image: url(Icons-DarkSky/rain.png);
+}
+.sleet {
+  background-image: url(Icons-DarkSky/sleet.png);
+}
+.snow {
+  background-image: url(Icons-DarkSky/snow.png);
+}
+.wind {
+  background-image: url(Icons-DarkSky/wind.png);
+}
+
+#darkSkyLink{
+  text-align: right;
+  font-size:0.75em;
+  padding-top: 1em;
+}
+
+a{
+  color: white;
+}
