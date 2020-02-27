@@ -49,8 +49,8 @@ function bodyLoaded()
     raceName = document.getElementById("race_name");
     runName  = document.getElementById("run_name");
     raceTime = document.getElementById("race_time");
-    bestLapName = document.getElementById("best_lap_name");
-    bestLapTime = document.getElementById("best_lap_time");
+    bestLapName = document.getElementById("total_best_lap_name");
+    bestLapTime = document.getElementById("total_best_lap_time");
     footerFlags = document.getElementsByClassName("footerFlags");
     var rows = resultsTable.getElementsByClassName("dataRow");
     for(let row of rows)
