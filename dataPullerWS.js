@@ -403,14 +403,14 @@ function updateResults(results)
                     if(resultItem["pos_change"][0]!=null)
                     {
                       ch = resultItem["pos_change"][0];
-                      el.className = "";
+                      el.className = "resultsCell";
                       if(ch<0)
                       {
-                        el.className = "posWin";
+                        addClass(el,"posWin");
                       }
                       if(ch>0)
                       {
-                        el.className = "posLost";
+                        addClass(el,"posLost");
                       }
                     }
                   }
@@ -419,7 +419,7 @@ function updateResults(results)
                 {
                   if(resultItem["competitor_state"][0]==1)
                   {
-                    el.className = "competitorFinished"
+                    el.className = "resultsCell competitorFinished"
                   }
                 }
                 if(okeys[key]=="num")

@@ -39,6 +39,7 @@
   background-size: 1em;
   width: 2.1em;
   background-repeat: no-repeat;
+  text-align: right;
 }
 
 #resultsTable .resultsCell#pos.posWin{
