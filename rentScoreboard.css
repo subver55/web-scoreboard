@@ -119,105 +119,10 @@ html, body{
 #footer .finishFlag{
   background-image: url(Icons/Flag-finish.png);
 }
-#resultsTable{
-  width: 100%;
-  font-size: 1em;
-  font-weight: normal;
-  border-collapse: collapse;
-}
-#resultsTable tr{
-  height: 1.8em;
-}
-#resultsTable tr.oddRow{
-    background-color: #3c3c3c;
-}
-#resultsTable th{
-  font-size: 1em;
-  color: white;
-  font-weight: normal;
-  font-size:0.9em;
-  vertical-align: bottom;
-}
-#resultsTable td{
 
-}
-#resultsTable td#pos{
-  font-size: 1em;
-  text-align: right;
-  width: 3em;
-}
-#resultsTable th#pos{
-  width: 2em;
-}
-#resultsTable td#pos{
-  background-position: left center;
-  background-size: 1em;
-  width: 2.1em;
-  background-repeat: no-repeat;
-}
-#resultsTable td#pos.posWin{
-  background-image: url(Icons/positionWin.png);
-}
-#resultsTable td#pos.posLost{
-  background-image: url(Icons/positionLost.png);
-}
-#resultsTable td#pos.competitorFinished{
-  background-image: url(Icons/Flag-finish.png);
-}
-#resultsTable td#num{
-  text-align: right;
-  color: white;
-  width: 3em;
-}
-#resultsTable th#num{
-  width: 3em;
-}
-#resultsTable td#name{
-  max-width: 0;
-  padding-left: 0.5em;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  color:white;
-}
-#resultsTable .lapTime{
-  width:5.5em;
-}
-#resultsTable td.lapTime{
-  text-align:right;
-}
-#resultsTable .sectorTime{
-  width: 4em;
-  padding-right:0.5em;
-}
-#resultsTable td#laps_count{
-  color: white;
-  text-align: right;
-  width:4em;
-}
-#resultsTable th#laps{
-  width:4em;
-}
-#results td#combined_best_lap_time{
-  padding-right: 1em;
-}
-.advertHeader{
-  width: 100%;
-  color: white;
-  font-size: 1.2em;
-  text-align: center;
-}
 #pLink{
   padding-top: 0.25em;
   font-size: 0.7em;
   color:#e0e0e0;
   text-align: right;
-}
-
-@keyframes blink {
-  from { background-color: white; }
-  to { background-color: inherit; }
-}
-.blink {
-  animation: blink 1s ; /* IE 10+ */
 }

@@ -1,4 +1,4 @@
-var weatherUrl = weatherDataUrl;
+//var weatherUrl = weatherDataUrl;
 function formatTemperature(val)
 {
   tval = Math.round(val);

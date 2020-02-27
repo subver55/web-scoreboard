@@ -1,8 +1,8 @@
-var scoreboardDataWsUrl = "ws://localhost:10310";
+var scoreboardDataWsUrl = "ws://192.168.1.115:10310";
 var currentTimeDiv=null;
 var resultsDataRow=null;
 var resultsTable=null;
-var resultsTableBody=null;
+
 var dataUpdated="";
 var raceName=null;
 var runName=null;
@@ -11,6 +11,8 @@ var bestLapName = null;
 var bestLapTime = null;
 var footerFlags = null;
 var wsScoreboard = null;
+var resultRows = Array();
+
 function connectWs()
 {
   wsScoreboard = new WebSocket(scoreboardDataWsUrl);
@@ -42,20 +44,21 @@ function bodyLoaded()
 {
     currentTimeDiv = document.getElementById('current_time');
     setInterval(updateCurrentTime,1000);
-    resultsDataRow = document.getElementById("dataRow").cloneNode();
-    resultsDataRow.innerHTML = document.getElementById("dataRow").innerHTML;
     resultsTable = document.getElementById("resultsTable");
-    if(resultsTable!=null)
-    {
-      resultsTable.deleteRow(1);
-      resultsTableBody = resultsTable.getElementsByTagName('tbody')[0];
-    }
+    resultsDataRow = resultsTable.querySelector("#dataRow");
     raceName = document.getElementById("race_name");
     runName  = document.getElementById("run_name");
     raceTime = document.getElementById("race_time");
     bestLapName = document.getElementById("best_lap_name");
     bestLapTime = document.getElementById("best_lap_time");
     footerFlags = document.getElementsByClassName("footerFlags");
+    var rows = resultsTable.getElementsByClassName("dataRow");
+    for(let row of rows)
+    {
+      row.remove();
+    }
+
+
     //pullData("reload");
     /*
     if(typeof initWeatherWidget !== "undefined")
@@ -254,9 +257,13 @@ function reloadData(json)
   {
     if(json["command"]=="clear")
     {
-      while(resultsTableBody.rows.length>1)
+      var nodes = resultsTable.querySelectorAll(".dataRow");
+      if(nodes!=null)
       {
-        resultsTable.deleteRow(1);
+        for(let node of nodes)
+        {
+          node.remove();
+        }
       }
       return;
     }
@@ -276,200 +283,194 @@ function reloadData(json)
       bestLapTime.innerHTML =  formatLapTime(update["bestLapTime"]);
     }
     results = update["results"];
-    if(results!=null)
+    updateResults(results)
+  }
+}
+function updateResults(results)
+{
+  if(results!=null)
+  {
+    var currentRowCount = resultsTable.children.length-1;
+    var newRowCount = 0;
+    for(i=0;i<results.length;i++)
     {
-      var currentRowCount = resultsTableBody.rows.length-1;
-      var newRowCount = 0;
-      for(i=0;i<results.length;i++)
+      var pos = results[i]["pos"][0];
+      if(pos!=null)
       {
-        var pos = results[i]["pos"][0];
-        if(pos!=null)
+        if(pos>newRowCount)
         {
-          if(pos>newRowCount)
-          {
-            newRowCount = pos;
-          }
+          newRowCount = pos;
         }
       }
-      if(currentRowCount<newRowCount)
+    }
+    if(currentRowCount<newRowCount)
+    {
+      for(i=currentRowCount;i<newRowCount;i++)
       {
-        for(i=currentRowCount;i<newRowCount;i++)
+
+        var newRow = resultsDataRow.cloneNode(true);
+        if((i+1)&0x01)
         {
-          var newRow = resultsTableBody.insertRow(i+1);
-          var cells = resultsDataRow.getElementsByTagName("td");
-          cells[0].innerHTML = i+1;
-          if((i+1)&0x01)
-          {
-              addClass(newRow,"oddRow");
-          }
-          else
-          {
-              removeClass(newRow,"oddRow");
-          }
-          newRow.innerHTML = resultsDataRow.innerHTML;
+            addClass(newRow,"oddRow");
         }
+        else
+        {
+            removeClass(newRow,"oddRow");
+        }
+        resultRows.push(newRow);
+        resultsTable.appendChild(newRow);
       }
-      if(results.length>0)
+    }
+    if(results.length>0)
+    {
+      for(let resultItem of results)
       {
-        /*
-        var tableCells = resultsTableBody.getElementsByTagName("tr");
-        for(let el of tableCells)
+        //resultItem = results[i];
+        okeys = Object.keys(resultItem);
+        var pos = resultItem["pos"][0];
+        var competitorId = resultItem["competitor_id"];
+        if(pos==null)
         {
-          el.classList.forEach((clname,i,arr)=>{
-            if(clname.substring(0,6)=="compid")
-            {
-                arr.remove(clname);
-            }
-          });
-        }*/
-
-        for(i=0;i<results.length;i++)
+          continue;
+        }
+        var row = resultsTable.querySelector(".compid"+competitorId);
+        if(row==null)
         {
-          resultItem = results[i];
-          okeys = Object.keys(resultItem);
-          var pos = resultItem["pos"][0];
-          var competitorId = resultItem["competitor_id"];
-          if(pos==null)
+          row = resultsTable.children[pos];
+          addClass(row,"compid"+competitorId);
+        }
+        else {
+          var oldPos = -1;
+          for(i=1;i<resultsTable.children.length;i++)
           {
-            continue;
-          }
-          row = resultsTableBody.getElementsByClassName("compid"+competitorId);
-          var prevPos = -1;
-
-          if(row.length>0)
-          {
-            row =row[0];
-            for(j=0;j<resultsTableBody.rows.length;j++)
+            if(row==resultsTable.children[i])
             {
-              if(resultsTableBody.rows[j]==row)
+              oldPos = i;
+              break;
+            }
+          }
+          if(oldPos!=pos)
+          {
+            row.remove();
+            resultsTable.insertBefore(row,resultsTable.children[pos]);
+            for(i=1;i<resultsTable.children.length;i++)
+            {
+              var r = resultsTable.children[i];
+              if((i%2) == 0)
               {
-                prevPos = j;
-                break;
-              }
-            }
-          }
-          if(prevPos!=-1)
-          {
-            if(prevPos!=pos)
-            {
-              resultsTableBody.deleteRow(prevPos);
-              var pr = resultsTableBody.insertRow(pos);
-              pr.innerHTML = row.innerHTML;
-              row = pr;
-              row.classList.add("compid"+competitorId);
-            }
-          }
-          else {
-            if(row.length==0)
-            {
-              row = resultsTableBody.rows[pos];
-            }
-            row.classList.add("compid"+competitorId);
-          }
-          cells = row.getElementsByTagName("td");
-          for(let cell of cells)
-          {
-            cell.classList.remove("blink");
-          }
-          for(key in okeys)
-          {
-            el = cells[okeys[key]];
-            if(el!=null)
-            {
-              val = resultItem[okeys[key]][0];
-              attr = resultItem[okeys[key]][1];
-              if(val!=null)
-              {
-                if(hasClass(el,"diff"))
-                {
-                  el.innerHTML = formatDiff(val);
-                }
-                else if(hasClass(el,"lapTime"))
-                {
-                  el.innerHTML = formatLapTime(val);
-                }
-                else if(hasClass(el,"laps"))
-                {
-                  el.innerHTML = formatLaps(val);
-                }
-                else
-                {
-                  if(okeys[key]=="pos")
-                  {
-                    if(resultItem["pos_change"]!=null)
-                    {
-                      if(resultItem["pos_change"][0]!=null)
-                      {
-                        ch = resultItem["pos_change"][0];
-                        el.className = "";
-                        if(ch<0)
-                        {
-                          el.className = "posWin";
-                        }
-                        if(ch>0)
-                        {
-                          el.className = "posLost";
-                        }
-                      }
-                    }
-                  }
-                  if(resultItem["competitor_state"]!=null)
-                  {
-                    if(resultItem["competitor_state"][0]==1)
-                    {
-                      el.className = "competitorFinished"
-                    }
-                  }
-                  if(okeys[key]=="num")
-                  {
-                    if(resultItem["short_class_name"]!=null)
-                    {
-                      if(resultItem["short_class_name"][0]!=null)
-                      {
-                        val = val+""+resultItem["short_class_name"][0];
-                      }
-                    }
-                  }
-                  el.innerHTML = val;
-                }
+                removeClass(r,"oddRow");
               }
               else
               {
-                el.innerHTML = "";
+                  addClass(r,"oddRow");
               }
-              removeClass(el,"personalBest");
-              removeClass(el,"totalBest");
-              if(attr!=null)
+              var p = r.querySelector("#pos");
+              if(p!=null)
               {
-                addClass(el,attr);
+                p.innerHTML = i;
               }
+            }
+          }
+        }
+        var cells = row.children;
+        for(key in okeys)
+        {
+          el = cells[okeys[key]];
+          if(el!=null)
+          {
+            val = resultItem[okeys[key]][0];
+            attr = resultItem[okeys[key]][1];
+            if(val!=null)
+            {
+              if(hasClass(el,"diff"))
+              {
+                el.innerHTML = formatDiff(val);
+              }
+              else if(hasClass(el,"lapTime"))
+              {
+                el.innerHTML = formatLapTime(val);
+              }
+              else if(hasClass(el,"laps"))
+              {
+                el.innerHTML = formatLaps(val);
+              }
+              else
+              {
+                if(okeys[key]=="pos")
+                {
+                  if(resultItem["pos_change"]!=null)
+                  {
+                    if(resultItem["pos_change"][0]!=null)
+                    {
+                      ch = resultItem["pos_change"][0];
+                      el.className = "";
+                      if(ch<0)
+                      {
+                        el.className = "posWin";
+                      }
+                      if(ch>0)
+                      {
+                        el.className = "posLost";
+                      }
+                    }
+                  }
+                }
+                if(resultItem["competitor_state"]!=null)
+                {
+                  if(resultItem["competitor_state"][0]==1)
+                  {
+                    el.className = "competitorFinished"
+                  }
+                }
+                if(okeys[key]=="num")
+                {
+                  if(resultItem["short_class_name"]!=null)
+                  {
+                    if(resultItem["short_class_name"][0]!=null)
+                    {
+                      val = val+""+resultItem["short_class_name"][0];
+                    }
+                  }
+                }
+                el.innerHTML = val;
+              }
+            }
+            else
+            {
+              el.innerHTML = "";
+            }
+            removeClass(el,"personalBest");
+            removeClass(el,"totalBest");
+            if(attr!=null)
+            {
+              addClass(el,attr);
             }
           }
         }
       }
     }
-    var lastPassings = update["lastPassings"];
-    if(lastPassings!=null)
-    {
-      //console.log(lastPassings);
-      lastPassings.forEach(passing => {
-        var compId = passing["competitor_id"];
-        if(compId!=null)
+  }
+  var lastPassings = update["lastPassings"];
+  if(lastPassings!=null)
+  {
+    //console.log(lastPassings);
+    lastPassings.forEach(passing => {
+      var compId = passing["competitor_id"];
+      if(compId!=null)
+      {
+        var row = resultsTable.querySelector(".compid"+compId);
+        cells = row.children;
+        var passingType = passing["pass_type"];
+        if(passingType!=null)
         {
-          var row = resultsTableBody.getElementsByClassName("compid"+compId)[0];
-          cells = row.getElementsByTagName("td");
-          var passingType = passing["pass_type"];
-          if(passingType!=null)
+          el = cells[passingType];
+          if(el!=null)
           {
-            el = cells[passingType];
-            if(el!=null)
-            {
-              blink(el);
-            }
+            blink(el);
           }
         }
-      });
-    }
+      }
+    });
   }
 }
 
@@ -480,5 +481,5 @@ function rmBlink(p)
 function blink(p)
 {
   p.classList.add("blink");
-  setTimeout(rmBlink,3000,p);
+  setTimeout(rmBlink,1000,p);
 }

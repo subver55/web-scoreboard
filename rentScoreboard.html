@@ -3,9 +3,12 @@
 <header>
 <meta charset="UTF-8">
 
-<link rel="stylesheet" href="rentScoreboard.css?v=1"/>
+<link rel="stylesheet" href="rentScoreboard.css?v=2"/>
+<link rel="stylesheet" href="resultsTable.css?v=2"/>
+<link rel="stylesheet" href="WeatherWidget/weatherwidget.css?v=2"/>
+
+
 <script src="dataPullerWS.js" type="text/javascript"></script>
-<link rel="stylesheet" href="WeatherWidget/weatherwidget.css?v=1"/>
 <script src="WeatherWidget/weatherwidget.js" type="text/javascript"></script>
 </header>
 <body onload="bodyLoaded()">
@@ -22,36 +25,36 @@
     </div>
     <div id="content">
           <div id="results">
-            <table id="resultsTable">
-              <tr id="headerRow">
-                <th id="pos"> Поз.</th>
-                <th id="num">№</th>
-                <th id="name">Имя</th>
-                <th id="best_lap" class="lapTime">Лучший<br> круг</th>
-                <th id="last_sect_1" class="sectorTime">S1</th>
-                <th id="last_sect_2" class="sectorTime">S2</th>
-                <th id="last_sect_3" class="sectorTime">S3</th>
-                <th id="last_lap" class="lapTime">Последний<br> круг</th>
-                <th id="laps">Круги</th>
-                <th id="diff" class="sectorTime">Разн.<br>лидер</th>
-                <th id="gap" class="sectorTime">Разн.<br>пред.</th>
-                <th id="combined_best_lap_time" class="lapTime">Теор.<br>круг</th>
-              </tr>
-              <tr id="dataRow" class="oddRow">
-                <td id="pos" class=""></td>
-                <td id="num"></td>
-                <td id="name"></td>
-                <td id="best_lap_time" class="lapTime personalBest"></td>
-                <td id="last_sector_1" class="lapTime sectorTime"></td>
-                <td id="last_sector_2" class="lapTime sectorTime"></td>
-                <td id="last_sector_3" class="lapTime sectorTime"></td>
-                <td id="last_lap_time_1" class="lapTime"></td>
-                <td id="laps_count" class="laps"></td>
-                <td id="diff" class="diff lapTime sectorTime"></td>
-                <td id="gap" class="diff lapTime sectorTime"></td>
-                <td id="combined_best_lap_time" class="lapTime"></td>
-              </tr>
-            </table>
+            <div id="resultsTable">
+              <div id="headerRow">
+                <div id="pos" class="headerCell"> Поз.</div>
+                <div id="num" class="headerCell">№</div>
+                <div id="name" class="headerCell">Имя</div>
+                <div id="best_lap" class="lapTime headerCell">Лучший<br> круг</div>
+                <div id="last_sect_1" class="sectorTime headerCell">S1</div>
+                <div id="last_sect_2" class="sectorTime headerCell">S2</div>
+                <div id="last_sect_3" class="sectorTime headerCell">S3</div>
+                <div id="last_lap" class="lapTime headerCell">Последний<br> круг</div>
+                <div id="laps" class="headerCell">Круги</div>
+                <div id="diff" class="sectorTime headerCell">Разн.<br>лидер</div>
+                <div id="gap" class="sectorTime headerCell">Разн.<br>пред.</div>
+                <div id="combined_best_lap_time" class="lapTime headerCell">Теор.<br>круг</div>
+              </div>
+              <div id="dataRow" class="oddRow dataRow">
+                <div id="pos" class="resultsCell"></div>
+                <div id="num" class="resultsCell"></div>
+                <div id="name" class="resultsCell"></div>
+                <div id="best_lap_time" class="lapTime personalBest resultsCell"></div>
+                <div id="last_sector_1" class="lapTime sectorTime resultsCell"></div>
+                <div id="last_sector_2" class="lapTime sectorTime resultsCell"></div>
+                <div id="last_sector_3" class="lapTime sectorTime resultsCell"></div>
+                <div id="last_lap_time_1" class="lapTime resultsCell"></div>
+                <div id="laps_count" class="laps resultsCell resultsCell"></div>
+                <div id="diff" class="diff lapTime sectorTime resultsCell"></div>
+                <div id="gap" class="diff lapTime sectorTime resultsCell"></div>
+                <div id="combined_best_lap_time" class="lapTime resultsCell"></div>
+              </div>
+            </div>
           </div>
           <div id=advertisment>
             <div  id="weather">
