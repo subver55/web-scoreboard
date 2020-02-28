@@ -17,7 +17,7 @@ function connectWs()
 {
   wsScoreboard = new WebSocket(scoreboardDataWsUrl);
   wsScoreboard.onopen= function(e){
-    var dataSet=["pos","num","short_class_name","pos_change","competitor_state","name",
+    var dataSet=["pos","num","short_class_name","competitor_state","name",
 "best_lap_time","last_sector_1","last_sector_2","last_sector_3","last_lap_time_1","last_lap_time_2","last_lap_time_3",
 "laps_count","diff","gap","best_sector_1","best_sector_2","best_sector_3","combined_best_lap_time"];
     wsScoreboard.send(JSON.stringify(dataSet));
@@ -469,9 +469,26 @@ function updateResults(results)
             blink(el);
           }
         }
+        var posChange = passing["posChange"];
+        if(posChange!=null)
+        {
+          el = cells["pos"];
+          if(el!=null)
+          {
+            el.className = "resultsCell";
+            if(posChange<0)
+            {
+              addClass(el,"posWin");
+            }
+            else if(posChange>0)
+            {
+              addClass(el,"posLost");
+            }
+          }
+        }
       }
     });
-  }
+  }  
 }
 
 function rmBlink(p)

@@ -32,12 +32,12 @@
 #resultsTable .headerCell#pos{
   font-size: 1em;
   text-align: center;
-  width: 3em;
+  width: 2.2em;
 }
 #resultsTable .resultsCell#pos{
   background-position: left center;
   background-size: 1em;
-  width: 2.1em;
+  width: 2.2em;
   background-repeat: no-repeat;
   text-align: right;
 }
