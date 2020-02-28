@@ -475,20 +475,23 @@ function updateResults(results)
           el = cells["pos"];
           if(el!=null)
           {
-            el.className = "resultsCell";
-            if(posChange<0)
+            if(hasClass(el,"competitorFinished")==false)
             {
-              addClass(el,"posWin");
-            }
-            else if(posChange>0)
-            {
-              addClass(el,"posLost");
-            }
+              el.className = "resultsCell";
+              if(posChange<0)
+              {
+                addClass(el,"posWin");
+              }
+              else if(posChange>0)
+              {
+                addClass(el,"posLost");
+              }
+           }
           }
         }
       }
     });
-  }  
+  }
 }
 
 function rmBlink(p)
