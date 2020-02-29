@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="raceScoreboard.css?v=2"/>
 <link rel="stylesheet" href="resultsTable.css?v=2"/>
+<script src="settings.js" type="text/javascript"></script>
 <script src="dataPullerWS.js" type="text/javascript"></script>
 </header>
 <body onload="bodyLoaded()">
@@ -45,7 +46,10 @@
               <div id="dataRow" class="oddRow dataRow">
                 <div id="pos" class="resultsCell"></div>
                 <div id="num" class="resultsCell"></div>
-                <div id="name" class="resultsCell"></div>
+                <div id="compositeNameContainter" class="resultsCell">
+                  <div id="name"></div>
+                  <div class="marker"></div>
+                </div>
                 <div id="best_lap_time" class="lapTime personalBest resultsCell"></div>
                 <div id="last_sector_1" class="lapTime sectorTime resultsCell"></div>
                 <div id="last_sector_2" class="lapTime sectorTime resultsCell"></div>

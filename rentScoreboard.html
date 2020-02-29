@@ -6,11 +6,12 @@
 <link rel="stylesheet" href="rentScoreboard.css?v=2"/>
 <link rel="stylesheet" href="resultsTable.css?v=2"/>
 <link rel="stylesheet" href="WeatherWidget/weatherwidget.css?v=2"/>
-
+<script src="settings.js" type="text/javascript"></script>
+<script src="advert.js" type="text/javascript"></script>
 <script src="dataPullerWS.js" type="text/javascript"></script>
 <script src="WeatherWidget/weatherwidget.js" type="text/javascript"></script>
 </header>
-<body onload="bodyLoaded()">
+<body onload="bodyLoaded(); loadAdvert();">
 <div id="container">
     <div id="header">
       <span id="race_name">
@@ -42,7 +43,10 @@
               <div id="dataRow" class="oddRow dataRow">
                 <div id="pos" class="resultsCell"></div>
                 <div id="num" class="resultsCell"></div>
-                <div id="name" class="resultsCell"></div>
+                <div id="compositeNameContainter" class="resultsCell">
+                  <div id="name"></div>
+                  <div class="marker"></div>
+                </div>
                 <div id="best_lap_time" class="lapTime personalBest resultsCell"></div>
                 <div id="last_sector_1" class="lapTime sectorTime resultsCell"></div>
                 <div id="last_sector_2" class="lapTime sectorTime resultsCell"></div>
@@ -55,6 +59,8 @@
               </div>
             </div>
           </div>
+
+
           <div id=advertisment>
             <div  id="weather">
               <div id="weatherHdr" class="advertHeader">
@@ -124,44 +130,14 @@
                 <a href="https://darksky.net/poweredby/">Powered by Dark Sky</a>
                 </div>
             </div>
-
-<!--
-
-Здесь вводить объявления
-и рекламу
-
--->
-
             <div class="advert">
-              <div id="trackHdr" class="advertHeader">
+              <div class="advertHeader">
                 Схема трассы
               </div>
               <img src="Images/track.png"/>
             </div>
 
-            <div class="advert">
-              <div id="" class="advertHeader">
-                Школа картинга
-              </div>
-              <div class="advertContent">
-              How TO - Include HTML. The HTML. Save the HTML you want to include in an .html file: content.html. Include the HTML. Including HTML is done by using a w3-include-html attribute: Example. Add the JavaScript. HTML includes are
-              </div>
-            </div>
-            <div class="advert">
-              <div id="" class="advertHeader">
-                Любительские соревнования
-              </div>
-              <div class="advertContent">
-              How TO - Include HTML. The HTML. Save the HTML you want to include in an .html file: content.html. Include the HTML. Including HTML is done by using a w3-include-html attribute: Example. Add the JavaScript. HTML includes are
-              </div>
-            </div>
-
           </div>
-<!--
-
-Конец блока объявлений и рекламы
-
--->
     </div>
     <div id="footer">
         <div id="left_flag" class="greenFlag footerFlags">
@@ -192,3 +168,11 @@
 </div>
 </body>
 </html>
+
+
+<div id="advert" class="advert">
+  <div class="advertHeader">
+  </div>
+  <div class="advertContent">
+  </div>
+</div>

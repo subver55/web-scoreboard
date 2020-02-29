@@ -1,4 +1,3 @@
-var scoreboardDataWsUrl = "ws://192.168.1.115:10310";
 var currentTimeDiv=null;
 var resultsDataRow=null;
 var resultsTable=null;
@@ -11,7 +10,7 @@ var bestLapName = null;
 var bestLapTime = null;
 var footerFlags = null;
 var wsScoreboard = null;
-var resultRows = Array();
+var competitorStates = {};
 
 function connectWs()
 {
@@ -57,14 +56,7 @@ function bodyLoaded()
     {
       row.remove();
     }
-
-
-    //pullData("reload");
-    /*
-    if(typeof initWeatherWidget !== "undefined")
-    {
-      initWeatherWidget();
-    }*/
+    setInterval(updateMarkers,50);
     connectWs();
 }
 
@@ -265,6 +257,7 @@ function reloadData(json)
           node.remove();
         }
       }
+      competitorStates = {};
       return;
     }
 
@@ -294,9 +287,10 @@ function updateResults(results)
     var newRowCount = 0;
     for(i=0;i<results.length;i++)
     {
-      var pos = results[i]["pos"][0];
+      var pos = results[i]["pos"]
       if(pos!=null)
       {
+        pos = pos[0];
         if(pos>newRowCount)
         {
           newRowCount = pos;
@@ -317,7 +311,6 @@ function updateResults(results)
         {
             removeClass(newRow,"oddRow");
         }
-        resultRows.push(newRow);
         resultsTable.appendChild(newRow);
       }
     }
@@ -372,10 +365,10 @@ function updateResults(results)
             }
           }
         }
-        var cells = row.children;
+
         for(key in okeys)
         {
-          el = cells[okeys[key]];
+          el = row.querySelector("#"+okeys[key]);
           if(el!=null)
           {
             val = resultItem[okeys[key]][0];
@@ -404,11 +397,11 @@ function updateResults(results)
                     {
                       ch = resultItem["pos_change"][0];
                       el.className = "resultsCell";
-                      if(ch<0)
+                      if(ch>0)
                       {
                         addClass(el,"posWin");
                       }
-                      if(ch>0)
+                      if(ch<0)
                       {
                         addClass(el,"posLost");
                       }
@@ -420,6 +413,15 @@ function updateResults(results)
                   if(resultItem["competitor_state"][0]==1)
                   {
                     el.className = "resultsCell competitorFinished"
+                    var competitorState = competitorStates[competitorId];
+                    if(competitorState!=null)
+                    {
+                      if(!competitorState.finished)
+                      {
+                        fadeOut(competitorState.marker);
+                      }
+                      competitorState.finished = true;
+                    }
                   }
                 }
                 if(okeys[key]=="num")
@@ -468,6 +470,26 @@ function updateResults(results)
           {
             blink(el);
           }
+          if(passingType=="last_lap_time_1")
+          {
+            var competitorState = competitorStates[compId];
+            if(competitorState==null)
+            {
+              var m = row.querySelector(".marker");
+              competitorState = {competitorId:compId,lastHit:Date.now(),lastLapTime:0,marker:m,finished:false};
+              competitorStates[compId]=competitorState;
+            }
+            competitorState.lastLapTime = passing["lapTime"];
+            if(competitorState.finished)
+            {
+              competitorState.lastLapTime = 0;
+            }
+            else {
+              competitorState.marker.style.width="0%";
+              rmFadeout(competitorState.marker);
+            }
+            competitorState.lastHit = Date.now();
+          }
         }
         var posChange = passing["posChange"];
         if(posChange!=null)
@@ -478,11 +500,11 @@ function updateResults(results)
             if(hasClass(el,"competitorFinished")==false)
             {
               el.className = "resultsCell";
-              if(posChange<0)
+              if(posChange>0)
               {
                 addClass(el,"posWin");
               }
-              else if(posChange>0)
+              else if(posChange<0)
               {
                 addClass(el,"posLost");
               }
@@ -502,4 +524,40 @@ function blink(p)
 {
   p.classList.add("blink");
   setTimeout(rmBlink,1000,p);
+}
+function rmFadeout(p)
+{
+  p.classList.remove("fadeOut");
+}
+function fadeOut(p)
+{
+  p.classList.add("fadeOut");
+}
+
+function updateMarkers()
+{
+  var cts = Date.now();
+  for(index in competitorStates)
+  {
+    var competitorState = competitorStates[index];
+    if(competitorState.marker!=null)
+    {
+      var llt = competitorState.lastLapTime;
+      if(llt>0)
+      {
+        var t = cts - competitorState.lastHit;
+        var progress=0;
+        if(llt>0)
+        {
+          if(t>llt)
+          {
+            fadeOut(competitorState.marker);
+            t = llt;
+          }
+          progress = (t*100.0)/llt;
+        }
+        competitorState.marker.style.width = progress+"%";
+      }
+    }
+  }
 }
