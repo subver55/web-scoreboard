@@ -5,15 +5,7 @@
   --totalBest: #ed55ed;
   --lapColor: white;
 }*/
-.lapTime{
-  color: white;
-}
-.personalBest{
-  color: #7af567;
-}
-.totalBest{
-  color: #ed55ed;
-}
+
 html, body{
     height:100%;
     width: 100%;
