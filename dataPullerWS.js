@@ -16,7 +16,7 @@ function connectWs()
 {
   wsScoreboard = new WebSocket(scoreboardDataWsUrl);
   wsScoreboard.onopen= function(e){
-    var dataSet=["pos","num","short_class_name","competitor_state","name",
+    var dataSet=["pos","pos_chane","num","short_class_name","competitor_state","name",
 "best_lap_time","last_sector_1","last_sector_2","last_sector_3","last_lap_time_1","last_lap_time_2","last_lap_time_3",
 "laps_count","diff","gap","best_sector_1","best_sector_2","best_sector_3","combined_best_lap_time"];
     wsScoreboard.send(JSON.stringify(dataSet));
