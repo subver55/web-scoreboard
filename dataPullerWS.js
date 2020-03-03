@@ -353,6 +353,7 @@ function updateResults(results)
       }
     }*/
   //  if(results.length>0)
+  var pp=1;
     {
       for(competitorId in results)
       {
@@ -451,41 +452,6 @@ function updateResults(results)
               }
               else
               {
-                if(okeys[key]=="pos")
-                {
-                  if(resultItem["pos_change"]!=null)
-                  {
-                    if(resultItem["pos_change"][0]!=null)
-                    {
-                      ch = resultItem["pos_change"][0];
-                      el.className = "resultsCell";
-                      if(ch>0)
-                      {
-                        addClass(el,"posWin");
-                      }
-                      if(ch<0)
-                      {
-                        addClass(el,"posLost");
-                      }
-                    }
-                  }
-                }
-                if(resultItem["competitor_state"]!=null)
-                {
-                  if(resultItem["competitor_state"][0]==1)
-                  {
-                    el.className = "resultsCell competitorFinished"
-                    var competitorState = competitorStates[competitorId];
-                    if(competitorState!=null)
-                    {
-                      if(!competitorState.finished)
-                      {
-                        fadeOut(competitorState.marker);
-                      }
-                      competitorState.finished = true;
-                    }
-                  }
-                }
                 if(okeys[key]=="num")
                 {
                   if(resultItem["short_class_name"]!=null)
@@ -511,6 +477,50 @@ function updateResults(results)
             }
           }
         }
+        if(resultItem["pos_change"]!=null)
+        {
+          if(resultItem["pos_change"][0]!=null)
+          {
+            ch = resultItem["pos_change"][0];
+            var el = row.querySelector("#pos");
+            if(el!=null)
+            {
+              el.className = "resultsCell";
+              if(ch>0)
+              {
+                addClass(el,"posWin");
+              }
+              if(ch<0)
+              {
+                addClass(el,"posLost");
+              }
+           }
+          }
+        }
+        if(resultItem["competitor_state"]!=null)
+        {
+          if(resultItem["competitor_state"][0]==1)
+          {
+            el = row.querySelector("#pos");
+            if(el!=null)
+            {
+              el.className = "resultsCell competitorFinished"
+              var competitorState = competitorStates[competitorId];
+              if(competitorState!=null)
+              {
+                if(!competitorState.finished)
+                {
+                  fadeOut(competitorState.marker);
+                }
+                competitorState.finished = true;
+              }
+            }
+          }
+        }
+
+
+
+
       }
     }
   }
@@ -553,6 +563,7 @@ function updateResults(results)
             competitorState.lastHit = Date.now();
           }
         }
+        /*
         var posChange = passing["posChange"];
         if(posChange!=null)
         {
@@ -572,7 +583,7 @@ function updateResults(results)
               }
            }
           }
-        }
+        }*/
       }
     });
   }
