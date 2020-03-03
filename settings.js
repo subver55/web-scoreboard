@@ -1,1 +1,2 @@
-var scoreboardDataWsUrl = "ws://192.168.1.115:10310";
+var scoreboardDataWsUrl = "ws://localhost:9180";
+var accessToken = "custom_token"

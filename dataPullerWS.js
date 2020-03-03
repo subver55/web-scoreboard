@@ -19,7 +19,10 @@ function connectWs()
     var dataSet=["pos","pos_chane","num","short_class_name","competitor_state","name",
 "best_lap_time","last_sector_1","last_sector_2","last_sector_3","last_lap_time_1","last_lap_time_2","last_lap_time_3",
 "laps_count","diff","gap","best_sector_1","best_sector_2","best_sector_3","combined_best_lap_time"];
-    wsScoreboard.send(JSON.stringify(dataSet));
+    var json={};
+    json["trackId"] = -1;
+    json["dataSet"] = dataSet;
+    wsScoreboard.send(JSON.stringify(json));
   };
   wsScoreboard.onmessage =function(event){
     var json = JSON.parse(event.data);
@@ -350,7 +353,7 @@ function updateResults(results)
               p.innerHTML = i;
             }
           }
-          
+
         }
         {
           var oldPos = -1;
