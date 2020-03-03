@@ -63,21 +63,15 @@
 #resultsTable .resultsCell#pos.competitorFinished{
   background-image: url(Icons/Flag-finish.png);
 }
+#resultsTable .headerCell#num{
+  width: 3em;
+}
 #resultsTable .resultsCell#num{
   text-align: center;
   color: white;
   width: 3em;
   background:#ff5f00;
 
-}
-#resultsTable .headerCell#num{
-  width: 3em;
-}
-#resultsTable .headerCell#name{
-  width: auto;
-}
-#resultsTable #compositeNameContainter{
-  position:relative;
 }
 #resultsTable #name{
   width: 100%;
@@ -87,6 +81,14 @@
   white-space: nowrap;
   color:white;
 }
+
+#resultsTable .headerCell#name{
+  width: auto;
+}
+#resultsTable #compositeNameContainter{
+  position:relative;
+}
+
 #resultsTable .lapTime{
   width:5.5em;
 }

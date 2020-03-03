@@ -16,11 +16,8 @@ function connectWs()
 {
   wsScoreboard = new WebSocket(scoreboardDataWsUrl);
   wsScoreboard.onopen= function(e){
-    var dataSet=["pos","pos_chane","num","short_class_name","competitor_state","name",
-"best_lap_time","last_sector_1","last_sector_2","last_sector_3","last_lap_time_1","last_lap_time_2","last_lap_time_3",
-"laps_count","diff","gap","best_sector_1","best_sector_2","best_sector_3","combined_best_lap_time"];
     var json={};
-    json["trackId"] = -1;
+    json["trackId"] = trackId;
     json["dataSet"] = dataSet;
     wsScoreboard.send(JSON.stringify(json));
   };
@@ -196,87 +193,124 @@ function reloadData(json)
 {
   refresh = json["refresh"];
   update = json["update"];
+  if(json["command"]=="clear")
+  {
+    var nodes = resultsTable.querySelectorAll(".dataRow");
+    if(nodes!=null)
+    {
+      for(let node of nodes)
+      {
+        node.remove();
+      }
+    }
+    competitorStates = {};
+//    return;
+  }
+
   if(!isEmpty(refresh))
   {
     if(raceName!=null)
     {
         var p = refresh["eventName"];
-        if(p=="" || p==null)
+        if(p==null)
         {
-          raceName.innerHTML = p;
+          p = refresh["raceName"];
         }
-        else
+        if(p!=null)
         {
-          raceName.innerHTML = p+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp";
+          if(p!="")
+          {
+            raceName.innerHTML = p+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp";
+          }
+          else {
+            raceName.innerHTML = "";
+          }
         }
 
     }
     if(runName!=null)
     {
-      runName.innerHTML =  refresh["runName"];
+      var rn = refresh["runName"];
+      if(rn!=null)
+      {
+        runName.innerHTML =  rn;
+      }
     }
     if(raceTime!=null)
     {
-      raceTime.innerHTML = formatRaceTime(refresh["elapsedTime"]);
-    }
-    if(footerFlags!=null)
-    {
-      for(i=0;i<footerFlags.length;i++)
+      var et = refresh["elapsedTime"];
+      if(et==null)
       {
-        footerFlags[i].className = "footerFlags";
-        if(refresh["flagState"]==0)
+        et = refresh["raceTime"]*1000;
+      }
+      if(et!=null && !isNaN(et))
+      {
+        raceTime.innerHTML = formatRaceTime(et);
+      }
+    }
+    var fl = refresh["flagState"];
+    if(fl==null)
+    {
+      fl = refresh["flagStatus"];
+    }
+    if(fl!=null)
+    {
+      if(footerFlags!=null)
+      {
+        for(i=0;i<footerFlags.length;i++)
         {
-          addClass(footerFlags[i],"greenFlag");
-        }
-        if(refresh["flagState"]==1)
-        {
-          addClass(footerFlags[i],"yellowFlag");
-        }
-        else
-        if(refresh["flagState"]==2)
-        {
-          addClass(footerFlags[i],"redFlag");
-        }
-        if(refresh["flagState"]==3)
-        {
-          addClass(footerFlags[i],"finishFlag");
-        }
-        if(refresh["flagState"]==4)
-        {
-          addClass(footerFlags[i],"warmupFlag");
+          footerFlags[i].className = "footerFlags";
+          if(fl==0)
+          {
+            addClass(footerFlags[i],"greenFlag");
+          }
+          if(fl==1)
+          {
+            addClass(footerFlags[i],"yellowFlag");
+          }
+          else
+          if(fl==2)
+          {
+            addClass(footerFlags[i],"redFlag");
+          }
+          if(fl==3)
+          {
+            addClass(footerFlags[i],"finishFlag");
+          }
+          if(fl==4)
+          {
+            addClass(footerFlags[i],"warmupFlag");
+          }
         }
       }
     }
   }
   if(!isEmpty(update))
   {
-    if(json["command"]=="clear")
-    {
-      var nodes = resultsTable.querySelectorAll(".dataRow");
-      if(nodes!=null)
-      {
-        for(let node of nodes)
-        {
-          node.remove();
-        }
-      }
-      competitorStates = {};
-      return;
-    }
 
-    blTime = update["bestLapTime"];
-    blName = update["bestLapName"];
-    if(blName==null || blTime==0 || blTime==null)
+
+    var blInfo = update["bestLapInfo"];
+    if(blInfo!=null)
     {
-      blName="";
-    }
-    if(bestLapName!=null)
-    {
-      bestLapName.innerHTML = blName;
-    }
-    if(bestLapTime!=null)
-    {
-      bestLapTime.innerHTML =  formatLapTime(update["bestLapTime"]);
+      var blTime = blInfo["lapTime"];
+      var blName = blInfo["name"];
+      var blNum = blInfo["num"];
+      if(blName==null || blTime==0 || blTime==null)
+      {
+        blName="";
+      }
+      if(blNum!=null && blNum!="")
+      {
+        blName = blNum+" "+blName;
+      }
+      if(bestLapName!=null)
+      {
+        bestLapName.innerHTML = blName;
+      }
+      if(bestLapTime!=null)
+      {
+        bestLapTime.innerHTML =  formatLapTime(blTime);
+      }
     }
     results = update["results"];
     updateResults(results)
@@ -318,18 +352,22 @@ function updateResults(results)
         resultsTable.appendChild(newRow);
       }
     }*/
-    if(results.length>0)
+  //  if(results.length>0)
     {
-      for(let resultItem of results)
+      for(competitorId in results)
       {
-        //resultItem = results[i];
+        var resultItem = results[competitorId];
         okeys = Object.keys(resultItem);
-        var pos = resultItem["pos"][0];
-        var competitorId = resultItem["competitor_id"];
+        var pos = resultItem["pos"];
+        if(pos!=null)
+        {
+          pos = pos[0];
+        }
+        /*
         if(pos==null)
         {
           continue;
-        }
+        }*/
         var row = resultsTable.querySelector(".compid"+competitorId);
         if(row==null)
         {
@@ -355,6 +393,7 @@ function updateResults(results)
           }
 
         }
+        if(pos!=null)
         {
           var oldPos = -1;
           for(i=1;i<resultsTable.children.length;i++)
@@ -462,7 +501,7 @@ function updateResults(results)
             }
             else
             {
-              el.innerHTML = "";
+              //el.innerHTML = "";
             }
             removeClass(el,"personalBest");
             removeClass(el,"totalBest");
@@ -480,7 +519,7 @@ function updateResults(results)
   {
     //console.log(lastPassings);
     lastPassings.forEach(passing => {
-      var compId = passing["competitor_id"];
+      var compId = passing["competitorId"];
       if(compId!=null)
       {
         var row = resultsTable.querySelector(".compid"+compId);
@@ -502,7 +541,7 @@ function updateResults(results)
               competitorState = {competitorId:compId,lastHit:Date.now(),lastLapTime:0,marker:m,finished:false};
               competitorStates[compId]=competitorState;
             }
-            competitorState.lastLapTime = passing["lapTime"];
+            competitorState.lastLapTime = passing["lastLapTime"];
             if(competitorState.finished)
             {
               competitorState.lastLapTime = 0;
